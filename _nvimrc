@@ -15,9 +15,9 @@ filetype off
 call pathogen#infect()
 " Add vundle to the runtimepath
 if has('win32' || 'win64')
-    set runtimepath+=$VIM\vimfiles\bundle\Vundle.vim\
+    set runtimepath+=$VIM\nvimfiles\bundle\Vundle.vim\
 else
-    set runtimepath+=~/.vim/bundle/Vundle.vim/
+    set runtimepath+=~/.nvim/bundle/Vundle.vim/
 endif
 call vundle#rc()
 call vundle#begin()
@@ -33,9 +33,7 @@ Plugin 'powerline/fonts'
 " Snippets 'engine'
 Plugin 'honza/vim-snippets'
 " Snippets controller
-Plugin 'SirVer/ultisnips'
-" Second snippets controller
-"Plugin 'msanders/snipmate.vim'
+Plugin 'msanders/snipmate.vim'
 " }}}
 " Original Bundles {{{
 if has("mac")
@@ -50,7 +48,6 @@ Plugin 'Shougo/vimshell.vim'
 Plugin 'benmills/vimux'
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
-Plugin 'chiphogg/vim-vtd'
 Plugin 'chrisbra/csv.vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'edkolev/promptline.vim'
@@ -59,7 +56,6 @@ Plugin 'google/vim-codefmt'
 Plugin 'google/vim-coverage'
 Plugin 'google/vim-ft-vroom'
 Plugin 'google/vim-glaive'
-Plugin 'google/vim-maktaba'
 Plugin 'google/vim-syncopate'
 Plugin 'kien/ctrlp.vim'
 Plugin 'kien/rainbow_parentheses.vim'
@@ -141,69 +137,6 @@ call vundle#end()
 " This helps correct the duplicate help tags.
 call pathogen#helptags()
 " }}}
-" Python Segments {{{
-" Assumes Python >= 2.6
-if has('python')
-" Quick way to open a filename under the cursor in a new tab
-" (or URL in a browser)
-function! Open()
-python <<EOF
-import re
-import platform
-import vim
-
-def launch(uri):
-    if platform.system() == 'Darwin':
-        vim.command('!open {}'.format(uri))
-    elif platform.system() == 'Linux':
-        vim.command('!firefox -new-tab {}'.format(uri))
-
-def is_word(text):
-    return re.match(r'^[\w./?%:#&=~+-]+$', text) is not None
-
-filename_start = filename_end = vim.current.window.cursor[1] # (row, col)
-
-while filename_start >= 0 and is_word(vim.current.line[filename_start:filename_start+1]):
-    filename_start -= 1
-filename_start += 1
-
-while filename_end <= len(vim.current.line) and is_word(vim.current.line[filename_end:filename_end+1]):
-    filename_end += 1
-
-filename = vim.current.line[filename_start:filename_end]
-
-if filename.endswith('.md') or filename.endswith('.txt'):
-    vim.command('tabedit {0}'.format(filename))
-
-elif filename.lower().startswith('http') or filename.lower().startswith('www.'):
-    if filename.lower().startswith('www.'):
-        filename = 'http://{0}'.format(filename)
-    filename = filename.replace('#', r'\#').replace('%', r'\%').replace('~', r'\~')
-    launch(filename)
-
-else:
-    launch(filename)
-EOF
-
-endfunction
-
-
-
-" Add the virtualenv's site-packages to vim path
-python << EOF
-import os.path
-import sys
-import vim
-
-if 'VIRTUAL_ENV' in os.environ:
-    project_base_dir = os.environ['VIRTUAL_ENV']
-    sys.path.insert(0, project_base_dir)
-    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-    execfile(activate_this, dict(__file__=activate_this))
-
-EOF
-endif
-" }}}
 " Vim Settings {{{
 syntax on
 " Terminal colors to 256 colors
@@ -242,8 +175,6 @@ if has('gui_running')
     runtime! indent/google_python_style.vim
     set background=dark
     colorscheme earendel
-    let do_syntax_sel_menu=1
-    runtime! synmenu.vim
 else
     " Sets window to have a title
     set title
@@ -252,8 +183,9 @@ else
     set background=dark
     "colorscheme brookstream
     colorscheme earendel
-    aunmenu &Syntax.&Show\ filetypes\ in\ menu
 endif
+let do_syntax_sel_menu=1
+runtime! synmenu.vim
 " }}}
 " Status line {{{
 " Show extra info in status line
