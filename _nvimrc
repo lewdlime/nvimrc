@@ -14,17 +14,12 @@ filetype off
 " Load pathogen
 call pathogen#infect()
 " Add vundle to the runtimepath
-if has('win32' || 'win64')
-    set runtimepath+=$VIM\nvimfiles\bundle\Vundle.vim\
-else
-    set runtimepath+=~/.nvim/bundle/Vundle.vim/
-endif
+set runtimepath+=~/.nvim/bundle/Vundle.vim/
 call vundle#rc()
 call vundle#begin()
 " Required
-Plugin 'gmarik/Vundle.vim'
 " Only use this fork for Windows.
-"Plugin 'laughingman182/Vundle.vim'
+Plugin 'leesavide/Vundle.vim'
 " }}}
 " Bundles {{{
 " Powerline fonts are required for Powerline to be useful to Vim
